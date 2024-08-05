@@ -1,0 +1,80 @@
+
+
+package com.mergesort;
+
+import java.util.Scanner;
+
+class MergeS{
+    public static void mergeSort(int[] arr,int beg , int end){
+        if(beg<end){
+            int mid=(beg+end)/2;
+            mergeSort(arr,beg,mid);
+            mergeSort(arr,mid+1,end);
+            merge(arr,beg,mid,end);
+        }
+    }
+   
+    public static void merge(int[] arr,int beg,int mid,int end){
+        int size1=mid-beg+1;
+        int size2=end-mid;
+       
+        int[] Leftarr= new int[size1];
+        int[] Rightarr=new int[size2];
+       
+        for(int i=0;i<size1;i++){
+            Leftarr[i]=arr[beg+i];
+        }
+       
+         for(int j=0;j<size2;j++){
+            Rightarr[j]=arr[mid+1+j];
+       
+        }
+        int i=0;
+        int j=0;
+        int k=beg;
+       
+        while(i<size1 && j<size2){
+            if(Leftarr[i]<=Rightarr[j]){
+            arr[k]= Leftarr[i];
+            i++;
+            }
+            else{
+                arr[k]=Rightarr[j];
+                j++;
+            }
+            k++;
+           
+        }
+        while(i<size1){
+            arr[k]=Leftarr[i];
+            i++;
+            k++;
+           
+        }
+       
+        while(j<size2){
+            arr[k]=Rightarr[j];
+            j++;
+            k++;
+        }
+    }
+}
+public class Mergesort {
+    public static void main(String args[]) {
+        Scanner sc= new Scanner(System.in);
+        System.out.println("Enter the size of the array");
+        int n=sc.nextInt();
+        int[] arr=new int[n];
+        System.out.println("Enter the array");
+        for(int i=0;i<n;i++){
+            arr[i]=sc.nextInt();
+        }
+        MergeS ms=new MergeS();
+        ms.mergeSort(arr,0,n-1);
+        System.out.println("Sorted Array");
+        for(int j=0;j<n;j++){
+            System.out.print(arr[j]+" ");
+        }
+    }
+}
+
