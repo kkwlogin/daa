@@ -1,0 +1,122 @@
+package com.krushkal;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Krushkal {
+
+   static class Edge {
+        int src, des, weight;
+
+        public Edge(int src, int des, int weight) {
+            this.src = src;
+            this.des = des;
+            this.weight = weight;
+        }
+    }
+
+    public static int find(int e, int[] parent) {
+        if (parent[e] != e) {
+            parent[e] = find(parent[e], parent);
+        }
+        return parent[e];
+    }
+
+    public static void union(int m, int n, int[] parent, int[] rank) {
+        int rootM = find(m, parent);
+        int rootN = find(n, parent);
+
+        if (rootM != rootN) {
+            if (rank[rootM] > rank[rootN]) {
+                parent[rootN] = rootM;
+            } else if (rank[rootM] < rank[rootN]) {
+                parent[rootM] = rootN;
+            } else {
+                parent[rootN] = rootM;
+                rank[rootM]++;
+            }
+        }
+    }
+
+    public static void kruskalMST(int[][] cost, int V) {
+        int[] parent = new int[V];
+        int[] rank = new int[V];
+
+        for (int i = 0; i < V; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+
+        List<Edge> edgeList = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            for (int j = i + 1; j < V; j++) {
+                if (cost[i][j] != Integer.MAX_VALUE && cost[i][j] != 0) {
+                    edgeList.add(new Edge(i, j, cost[i][j]));
+                }
+            }
+        }
+
+        Edge[] edges = edgeList.toArray(new Edge[0]);
+        
+        // Sort edges by weight using Java's Arrays.sort() with a comparator
+        Arrays.sort(edges, Comparator.comparingInt(e -> e.weight));
+
+        int minCost = 0;
+        int edgeCount = 0;
+        System.out.println("Selected edges in MST:");
+        for (Edge edge : edges) {
+            if (edgeCount == V - 1) {
+                break;
+            }
+
+            int srcSet = find(edge.src, parent);
+            int desSet = find(edge.des, parent);
+
+            if (srcSet != desSet) {
+                union(edge.src, edge.des, parent, rank);
+                System.out.printf("Edge %d: (%d, %d) cost: %d\n", edgeCount++, edge.src, edge.des, edge.weight);
+                minCost += edge.weight;
+            }
+        }
+
+        System.out.printf("Minimum cost of MST = %d\n", minCost);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the number of vertices of the graph:");
+        int v = sc.nextInt();
+
+        int[][] adj = new int[v][v];
+
+        System.out.println("Enter the weights in the adjacency matrix of the graph (use a large value like 999999 for no direct edge):");
+        for (int i = 0; i < v; i++) {
+            for (int j = 0; j < v; j++) {
+                if (i == j) {
+                    adj[i][j] = 0; 
+                } else {
+                    System.out.printf("Enter the weight of edge from vertex %d to vertex %d: ", i, j);
+                    int weight = sc.nextInt();
+                    adj[i][j] = weight == 999999 ? Integer.MAX_VALUE : weight;
+                }
+            }
+        }
+
+        System.out.println("Adjacency Matrix of the Graph:");
+        for (int i = 0; i < v; i++) {
+            for (int j = 0; j < v; j++) {
+                System.out.print((adj[i][j] == Integer.MAX_VALUE ? "∞" : adj[i][j]) + "\t");
+            }
+            System.out.println();
+        }
+
+        System.out.println("\nRunning Kruskal's Algorithm...");
+        kruskalMST(adj, v);
+
+        sc.close();
+    }
+}
