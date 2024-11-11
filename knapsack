@@ -1,0 +1,54 @@
+
+
+package com.knapsack;
+
+
+public class Knapsack {
+    public static void knapSack(double arr[],int p[],int w[],int n,int sw){
+        int tw=0;
+        double tp=0;
+        for(int i=0; i<n-1;i++){
+            for(int j=i+1; j<n;j++){
+                if(arr[j]>arr[i]){
+                    double temp=arr[j];
+                    arr[j]=arr[i];
+                    arr[i]=temp;
+                    
+                    int temp1=p[i];
+                    p[i]=p[j];
+                    p[j]=temp1;
+                    
+                    int temp2=w[i];
+                    w[i]=w[j];
+                    w[j]=temp2;
+                }
+            }
+        }
+        
+        for(int i=0;i<n;i++){
+            if(tw+w[i] <= sw){
+                tw += w[i];
+                tp += p[i];
+            }else{
+                int remainWeight=sw-tw;
+                tp += (double)(p[i]*remainWeight / w[i]);
+                break;
+            }
+        }
+        
+        System.out.println("Total Profit"+tp);
+    }
+
+    public static void main(String[] args) {
+        int sw=3;
+        int n=3;
+        int p[]={1,2,3};
+        int w[]={4,5,1};
+        double arr[]=new double[n];
+        for(int i=0;i<n;i++){
+        arr[i]=(double)p[i]/w[i];
+    }
+        knapSack(arr,p,w,n,sw);
+        
+    }
+}
