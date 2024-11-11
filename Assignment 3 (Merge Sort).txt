@@ -1,0 +1,94 @@
+package mergesort;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MergeSort {
+	
+	public void MergeSort(int arr[],int startIndex,int endIndex) {
+		if(startIndex<=endIndex) {
+			
+			int midIndex = (startIndex+endIndex)/2;
+			
+			  MergeSort(arr,startIndex,midIndex-1);
+			  MergeSort(arr,midIndex+1,endIndex);
+
+			merge(arr,startIndex,midIndex,endIndex);
+		}
+		
+	}
+	
+	public void merge(int arr[],int start,int mid,int end) {
+	
+		int n1 = mid - start + 1;
+		int n2 = end - mid;
+		
+		
+		int leftArray[] = new int[n1];
+		int rightArray[] = new int[n2];
+		
+		System.arraycopy(arr, start, leftArray, 0, n1);
+		System.arraycopy(arr, mid+1, rightArray, 0, n2);
+		int i = 0;
+		int j = 0;
+		int k = start;
+		while(i<n1 && j<n2) {
+			if(leftArray[i]<=rightArray[j]) {
+				arr[k] = leftArray[i];
+				i++;
+			} else {
+				arr[k] = rightArray[j];
+				j++;
+			}
+			k++;
+		}
+		
+		while(i<n1) {
+			arr[k] = leftArray[i];
+			i++;
+			k++;
+		}
+		while(j<n2) {
+			arr[k] = rightArray[j];
+			j++;
+			k++;
+		}
+		
+	}
+
+}
+
+
+
+
+
+package mergesort;
+
+import java.util.Scanner;
+
+public class MergeRunner {
+
+	public static void main(String[] args) {
+		MergeSort sort = new MergeSort();
+		Scanner sc = new Scanner(System.in);
+		
+		int n;
+		System.out.println("Enter the size of the array:");
+		n = sc.nextInt();
+		int arr[] = new int[n];
+		
+		System.out.println("Enter the elements of the array:");
+		for(int i=0;i<n;i++) {
+			arr[i] = sc.nextInt();
+		}
+		
+		sort.MergeSort(arr,0,n-1);
+		
+		System.out.println("Sorted elements are:");
+		for(int i=0;i<n;i++) {
+			System.out.println(arr[i]);
+		}
+		
+	}
+
+}

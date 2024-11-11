@@ -1,0 +1,105 @@
+package Assignment5;
+
+public class KnapSack {
+
+	public void fractionalKnapsack(int n,int capacity,int p[],int w[]) {
+		float ratio[] = new float[n];
+		
+		for(int i=0;i<n;i++) {
+			ratio[i] = (float) p[i]/w[i];
+		}
+
+		System.out.println("Ratio of the weights are :");
+		for(float a:ratio) {
+			System.out.println(a);
+		}
+
+	    for(int s=0;s<n-1;s++) {
+			for (int q = s + 1; q < n; q++) {
+	    		if(ratio[s]<ratio[q]) {
+	    			float temp = ratio[s];
+	    			ratio[s] = ratio[q];
+	    			ratio[q] = temp;
+
+	    			int tmp = p[s];
+	    			p[s] = p[q];
+	    			p[q] = tmp;
+	    			
+	    			int tmp2 = w[s];
+	    			w[s] = w[q];
+	    			w[q] = tmp2;
+	    		}
+	    	}
+	    }
+
+	    System.out.println("Decreasing order of ratio :");
+	    for(float r:ratio) {
+			System.out.println(r);
+		}
+
+	    System.out.println("Decreasing order of profit :");
+	    for(int pr:p) {
+			System.out.println(pr);
+		}
+
+	    System.out.println("Decreasing order of weight :");
+	    for(int wg:w) {
+			System.out.println(wg);
+		}
+
+
+		float maxProfit = 0;
+		int remainingCapacity = capacity;
+
+		System.out.println("Items added to the knapsack:");
+
+		for (int i = 0; i < n; i++) {
+			if (w[i] <= remainingCapacity) {
+				remainingCapacity = remainingCapacity - w[i];
+				maxProfit = maxProfit + p[i];
+				System.out.println("Item " + (i + 1) + ": added completely.");
+			} else {
+				float fraction = (float) remainingCapacity / w[i];
+				maxProfit = maxProfit + p[i] * fraction;
+				System.out.println("Item " + (i + 1) + ": added " + fraction);
+				break;
+			}
+	    }
+
+		System.out.println("Maximum Profit: " + maxProfit);
+
+	}
+}
+package Assignment5;
+
+import java.util.Scanner;
+
+public class KnapSackRunner {
+
+	public static void main(String[] args) {
+
+		KnapSack k = new KnapSack();
+		Scanner sc = new Scanner(System.in);
+		int capacity;
+		System.out.println("Enter the Capacity of the Knapsack:");
+		capacity = sc.nextInt();
+		int n;
+		System.out.println("Enter the no of items");
+		n = sc.nextInt();
+		int profit[] = new int[n];
+		int weight[] = new int[n];
+
+		System.out.println("Enter the profits of all items :");
+		for (int i = 0; i < n; i++) {
+			profit[i] = sc.nextInt();
+		}
+
+		System.out.println("Enter the weights of all items :");
+		for (int j = 0; j < n; j++) {
+			weight[j] = sc.nextInt();
+		}
+
+		k.fractionalKnapsack(n, capacity, profit, weight);
+
+	}
+}

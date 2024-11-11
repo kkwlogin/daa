@@ -1,0 +1,62 @@
+package Assignment2;
+
+public class QuickSorting {
+	
+	public int partition(int[] arr,int startIndex,int endIndex) {
+		int pivot = arr[startIndex];
+		int low = startIndex+1;
+		int high = endIndex;
+		while(low<=high) {
+			while(low<=endIndex && arr[low]<=pivot) {
+				low++;
+			}
+			while(high>=startIndex && arr[high]>pivot) {
+				high--;
+			}
+			if(low<high) {
+				int temp = arr[low];
+				arr[low] = arr[high];
+				arr[high] = temp;
+			}
+		}
+		int temp = arr[startIndex];
+		arr[startIndex] = arr[high];
+		arr[high] = temp;
+		
+		return high;
+	}
+	
+	public void Quicksort(int[] arr,int startIndex,int endIndex) {
+		if(startIndex<endIndex) {
+			int low = startIndex;
+			int high = endIndex;
+			int pivotedElement = partition(arr,low,high);
+			Quicksort(arr,low,pivotedElement-1);
+			Quicksort(arr,pivotedElement+1,high);
+		}
+	}
+
+}
+public class QuickSortingRunner {
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		QuickSorting sort = new QuickSorting();
+		int n;
+		System.out.println("Enter the Length of the array:\n");
+		n = sc.nextInt();
+		int[] array = new int[n];
+		System.out.println("Enter the Elements  of the array:\n");
+		for(int i=0;i<n;i++) {
+			array[i] = sc.nextInt();
+		}
+		
+		sort.Quicksort(array,0,n-1);
+		
+		System.out.println("Sorted Elements of the array:\n");
+		for(int i=0;i<n;i++) {
+			System.out.print( " " + array[i]);
+		}
+	}
+
+}

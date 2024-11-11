@@ -1,0 +1,127 @@
+package com.example.MaxMin;
+
+import java.util.*;
+
+
+public class MaxMin {
+	
+	
+	public static int max;
+	public static int min;
+
+	
+	public static List<Integer> findMaxMin(int arr[],int i,int j) {
+		
+		if(i==j) {
+			max = min = arr[i];
+			List<Integer> result = new ArrayList<Integer>();
+			result.add(max);
+			result.add(min);
+			return result;
+		}
+		else 
+			if(i==j-1) {
+				List<Integer> result = new ArrayList<Integer>();
+				if(arr[i]<arr[j]) {
+					max = arr[j];
+					min = arr[i];
+					result.add(max);
+					result.add(min);
+				} else {
+					max = arr[i];
+					min = arr[j];
+					result.add(max);
+					result.add(min);
+				}
+				return result;
+			}
+			else {
+				int mid = (i+j)/2;
+				
+			List<Integer> left = new ArrayList<Integer>(findMaxMin(arr,i,mid));
+			List<Integer> right= new ArrayList<Integer>(findMaxMin(arr,mid+1,j));
+			
+			int leftMax = left.get(0);
+	        int leftMin = left.get(1);
+	        int rightMax = right.get(0);
+	        int rightMin = right.get(1);
+	        
+	         max = Math.max(leftMax, rightMax);
+	         min = Math.min(leftMin, rightMin);
+	        
+				List<Integer> combine = new ArrayList<Integer>();
+				combine.add(max);
+				combine.add(min);
+				return combine;
+			}
+	}
+	
+	
+public static void FindMaxMin(int arr[],int i,int j) {
+		
+		if(i==j) {
+			 max = min = arr[i];
+		}
+		else 
+			if(i==j-1) {
+				if(arr[i]<arr[j]) {
+					max = arr[j];
+					min = arr[i];
+				} else {
+					max = arr[i];
+					min = arr[j];
+				}
+			}
+			else {
+				int mid = (i+j)/2;
+				
+			FindMaxMin(arr,i,mid);
+			int max1 = max;
+			int min1 = min;
+			FindMaxMin(arr,mid+1,j);
+			
+            if(max < max1) {
+            	max = max1;
+            }
+            
+            if(min > min1) {
+            	min = min1;
+            }
+            
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+package com.example.MaxMin;
+
+import java.util.*;
+
+public class MaxMinRunner {
+
+	public static void main(String[] args) {
+		MaxMin m =  new MaxMin();
+		Scanner sc = new Scanner(System.in);
+		int n;
+		System.out.println("Enter the size of the array:");
+		n = sc.nextInt();
+		int arr[] = new int[n];
+		
+		System.out.println("Enter the values of the array:");
+		for(int i =0;i<n;i++) {
+			arr[i] = sc.nextInt();
+		}
+		
+		m.FindMaxMin(arr, 0, n-1);
+		
+		System.out.println("Maximum Element :" + m.max);
+		System.out.println("Minimum Element :" + m.min);
+
+}
+}
