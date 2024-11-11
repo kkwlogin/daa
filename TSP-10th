@@ -1,0 +1,108 @@
+
+
+package com.tspbb;
+
+import java.util.*;
+
+class TSP{
+    private int n;
+    private int[][] dist;
+    private int minCost =Integer.MAX_VALUE;
+    private int[] bestPath;
+
+    
+    public TSP(int dist[][]){
+        this.dist=dist;
+        this.n=dist.length;
+        this.bestPath=new int[n+1];
+    }
+    
+    public void solve(){
+        boolean visited[]=new boolean[n];
+        visited[0]=true;
+        findPath(0,0,1,visited,new int[n]);
+        printResults();
+        
+    }
+    
+    public void findPath(int currentCity, int cost, int level, boolean visited[], int currentPath[]){
+        currentPath[level-1]=currentCity;
+        
+        if(level==n){
+            cost += dist[currentCity][0];
+            if(cost<minCost){
+                minCost=cost;
+                System.arraycopy(currentPath, 0, bestPath, 0, n);
+                bestPath[n]=0;
+            }
+            return;
+        }
+        
+        int lowerBound=calculatelowerBound(visited,currentCity);
+        
+        if(lowerBound>=minCost){
+            return;
+        }
+        
+        for (int i=0;i<n;i++){
+            if(!visited[i]){
+                    
+                visited[i]=true;
+                findPath(i,cost+dist[currentCity][i],level+1,visited,currentPath);
+                visited[i]=false;
+            }
+            
+        }
+        
+    }
+    
+    
+    public int calculatelowerBound(boolean visited[], int currentCity){
+        
+    int bound=0;
+        for (int i=0;i<n;i++){
+            if(!visited[i]){
+            int minEdge=Integer.MAX_VALUE;
+            for(int j=0;j<n;j++){
+                    if(i != j && !visited[j]){
+                    minEdge = Math.min(minEdge, dist[i][j]);
+                }
+            }
+            
+            if(minEdge != Integer.MAX_VALUE){
+            bound += minEdge;
+            }
+    }
+        }
+    return bound;
+
+ }
+    
+    public void printResults(){
+        System.out.println(minCost);
+        System.out.print("optimal path");
+                for(int i=0;i<=n;i++){
+
+        System.out.println(bestPath[i]);
+        }
+    }
+}
+public class TSPBB {
+
+       public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of cities: ");
+        int n = scanner.nextInt();
+
+        int[][] dist = new int[n][n];
+        System.out.println("Enter the distance matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dist[i][j] = scanner.nextInt();
+            }
+        }
+        
+        TSP tsp=new TSP(dist);
+        tsp.solve();
+       }
+}
