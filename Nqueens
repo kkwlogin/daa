@@ -1,0 +1,63 @@
+
+
+package com.nqueens;
+import java.util.Scanner;
+/**
+ *
+ * @author kaust
+ */
+public class Nqueens {
+    
+    public static void printBoard(int board[][],int n){
+        for(int i=0; i<n;i++){
+            for(int j=0;j<n;j++){
+                System.out.print((board[i][j]== 1 ? "1" : "0")+(" "));
+            }
+            System.out.println();
+        }
+        
+        System.out.println();
+    }
+    
+    public static boolean isSafe(int board[][],int row,int col,int n){
+        for(int i=0;i<row;i++){
+            if(board[i][col]==1 || ((col-(row-i))>=0 && board[i][col-(row-i)]==1) || ( (col+(row-i))<n && board[i][col+(row-i)]==1)){
+                return false;
+            }
+        }
+                    return true;
+
+    }
+    
+    public static boolean solveNqueens(int board[][],int row,int n){
+        if(row>=n){
+            printBoard(board,n);
+            return true;
+        }
+            boolean foundSoln=false;
+            
+            for(int col=0;col<n;col++){
+                if(isSafe(board,row,col,n)){
+                    board[row][col]=1;
+                    foundSoln = solveNqueens(board,row+1,n) || foundSoln;
+                    board[row][col]=0;
+                }
+            }
+        
+        return foundSoln;
+    }
+    public static void Nqueens(int n){
+        int board[][]=new int[10][10];
+        
+        if(!solveNqueens(board,0,n)){
+            System.out.println("NO solution for give number of queens");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc= new Scanner(System.in);
+        System.out.println("Enter the number of queens");
+        int n= sc.nextInt();
+        Nqueens(n);
+    }
+}
